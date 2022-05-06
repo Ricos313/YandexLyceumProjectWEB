@@ -4,7 +4,16 @@ from datetime import datetime
 import requests
 from PyQt5 import QtCore, QtGui, QtWidgets
 import clientui
+import emojiinfo
 
+
+dict = {":laughing:": "😂", "smiley": "😁", ":smile1:": "😃", ":smile2:": "😄", ":smile3:": "😅",
+        ":smile4:": "😆", ":shy:": "😇", ":demon:": "😈", ":smile6:": "😉", ":smile7:": "😊",
+        ":smile8:": "😋", ":smile9:": "😌", ":loving:": "😍", ":smile11:": "😎", ":smile12:": "😏",
+        ":smile13:": "😐", ":smile14:": "😒", ":smile15:": "😓", ":smile16:": "😔", ":smile17:": "😖",
+        ":kissing:": "😘", ":heart:": "❤", ":dirt:": "💩", ":monkey:": "🙈", ":crown:": "👑",
+        ":snake:": "🐍", ":chicken:": "🐔", ":ghost:": "👻", ":fire:": "🔥", ":18+:": "🔞",
+        ":prize:": "🏆", ":lightning:": "⚡", ":moon:": "🌙", ":mask:": "😷", ":angry:": "😤"}
 
 
 class Messenger(QtWidgets.QMainWindow, clientui.Ui_MainWindow):
@@ -22,6 +31,21 @@ class Messenger(QtWidgets.QMainWindow, clientui.Ui_MainWindow):
         name = self.lineEdit.text()
         text = self.textEdit.toPlainText()
         try:
+            if text.count(":") >= 2:
+                first = text.find(":")
+                second = text[first + 1:].find(":") + first + 2
+                count = text.count(":")
+                while count >= 2 and count % 2 == 0:
+                    if text[first:second] in dict:
+                        smile = dict[text[first:second]]
+                        text = f'{text[:first]}{smile}{text[second + 1:]}'
+                        count -= 2
+                    try:
+                        first = text[second:].find(":") + first + second + 2
+                        second = text[first + 1:].find(":") + first + 2
+                    except:
+                        break
+
             data = {
                 "name": name,
                 "text": text
@@ -33,6 +57,7 @@ class Messenger(QtWidgets.QMainWindow, clientui.Ui_MainWindow):
         if responce.status_code != 200:
             self.textBrowser.append('Проверьте имя или текст\n')
             return
+
         self.textEdit.setText('')
 
     def print_message(self, message):
@@ -54,8 +79,14 @@ class Messenger(QtWidgets.QMainWindow, clientui.Ui_MainWindow):
             self.after = message['time']
 
 
+class Info(emojiinfo.Ui_MainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
-    window = Messenger(host="https://69e1-95-140-31-114.eu.ngrok.io")
+    window = Messenger(host="https://aa75-178-176-77-77.eu.ngrok.io")
     window.show()
     app.exec()

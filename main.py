@@ -28,13 +28,13 @@ def send_message():
             or name == ''\
             or text == '':
         return abort(400)
+
     message = {
         "time": time.time(),
         "name": name,
         "text": text,
     }
     db.append(message)
-    print(message['text'])
     return {"ok": True}
 
 
