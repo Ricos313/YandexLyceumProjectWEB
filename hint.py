@@ -87,6 +87,6 @@ class Info(emojiinfo.Ui_MainWindow):
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
-    window = Messenger(host="https://aa75-178-176-77-77.eu.ngrok.io")
+    window = Messenger(host="https://e627-178-176-77-77.eu.ngrok.io")
     window.show()
     app.exec()
