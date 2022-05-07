@@ -4,7 +4,6 @@ from datetime import datetime
 import requests
 from PyQt5 import QtCore, QtGui, QtWidgets
 import clientui
-import emojiinfo
 
 
 dict = {":laughing:": "😂", "smiley": "😁", ":smile1:": "😃", ":smile2:": "😄", ":smile3:": "😅",
@@ -34,17 +33,9 @@ class Messenger(QtWidgets.QMainWindow, clientui.Ui_MainWindow):
             if text.count(":") >= 2:
                 first = text.find(":")
                 second = text[first + 1:].find(":") + first + 2
-                count = text.count(":")
-                while count >= 2 and count % 2 == 0:
-                    if text[first:second] in dict:
-                        smile = dict[text[first:second]]
-                        text = f'{text[:first]}{smile}{text[second + 1:]}'
-                        count -= 2
-                    try:
-                        first = text[second:].find(":") + first + second + 2
-                        second = text[first + 1:].find(":") + first + 2
-                    except:
-                        break
+                if text[first:second] in dict:
+                    smile = dict[text[first:second]]
+                    text = f'{text[:first]}{smile}{text[second + 1:]}'
 
             data = {
                 "name": name,
@@ -78,11 +69,6 @@ class Messenger(QtWidgets.QMainWindow, clientui.Ui_MainWindow):
             self.print_message(message)
             self.after = message['time']
 
-
-class Info(emojiinfo.Ui_MainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
 
 
 if __name__ == '__main__':
